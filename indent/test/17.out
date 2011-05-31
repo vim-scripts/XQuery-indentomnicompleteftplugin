@@ -1,0 +1,7 @@
+(: vi: ft=xquery sw=4
+
+    Test #17 - basic 'open function call'
+:)
+
+fn:concat(somestring,
+    $foo:bar-variable ,"=" , xdmp:url-encode($baz) ) 

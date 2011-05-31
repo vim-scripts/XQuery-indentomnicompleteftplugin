@@ -1,0 +1,11 @@
+(: vi: ft=xquery sw=4
+
+    Test #10 - Wrapped HTML tag indentation
+:)
+
+    import module namespace search = "http://marklogic.com/appservices/search"
+           at "/MarkLogic/appservices/search/search.xqy";
+
+               import module namespace log = "http://dlam.me/xquery/logger" at "../../logger.xqy"; 
+
+  declare

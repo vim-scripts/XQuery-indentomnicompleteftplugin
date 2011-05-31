@@ -1,0 +1,9 @@
+(: vi: ft=xquery sw=4
+
+    Test #10 - Wrapped HTML tag indentation
+:)
+
+             <form action="" method="post">
+                 <input type="url" placeholder="The SVN URL"
+                     name="{$ML-SVN-URL}" value="{$DEFAULT-SVN-URL}"/>
+                     <a href 

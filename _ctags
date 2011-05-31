@@ -1,0 +1,5 @@
+--langdef=xquery
+--langmap=xquery:.xqy
+--regex-xquery=/^(declare|define)[ \t]*(private)?[ \t]*function[ \t]*([_a-zA-Z0-9:-]*:)?([_a-zA-Z0-9-]+)/\4/f,function/
+--regex-xquery=/^(declare|define)[ \t]*(private)?[ \t]*variable[ \t]*\$([_a-zA-Z0-9:-]*|[_a-zA-Z0-9-]+)/\3/v,variable/
+--regex-xquery=/^module namespace[ \t]*(\w+)[ \t]*=.*/\1/m,module/

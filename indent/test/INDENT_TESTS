@@ -1,0 +1,219 @@
+vi:ft=xquery indentexpr=
+
+INDENT TESTS 
+
+1.solution)  rhs FLOWR alignment
+2.solution)  Embeeded tags
+3.solution)  FLOWR let statement alignment
+4.solution)  Basic nested FLOWR expression
+5.solution)  FLOWR alignment w/funciton call  let -> function call -> for  
+6.solution)  Typeswitch 
+7.solution)  Function declaration argument alignment (from xqdoc.org pdf p.26)
+8.solution)  searchpairpos() and function param alignment
+
+===============================================================================
+===============================================================================
+===============================================================================
+===============================================================================
+
+
+
+
+23) 3/21/2011  The second return here aligns with the previous word
+starting with a keyword ('return', or if thats not there, 'order by'),
+but it really should align with the first line / let expression
+
+      let $dood := let $foo := "asdf"
+                   let $dude := "Dude"
+                   order by $somethingelse
+                   return $foo
+                   return 
+                     $dood
+
+25) Indents to keyword when it shouldnt!    
+
+      let $dood := (
+        let $foo := "asdf"
+        order by $somethingelse
+        return 
+          "adsF"
+      )
+        return $dood
+
+
+24) Make sure XQueryIndentGet doesn't interfere with 'set comments'
+
+    (:~
+     :  Comment at start of file
+     :
+     :)
+
+
+    let $something := 
+      $foo/bar/baz/goo/doo/text()
+    let $hello := (
+
+    )
+    return (
+
+      (:~
+       :    hit enter in block comments to set it 'set comments' still works
+       :
+       :)
+
+    )
+
+23) The final return here, should not use XmlIndentGet just because there's 
+    a tag there
+
+    declare function flow-util:destination-count(
+      $ticket-id as xs:string,
+      $pubdb as xs:string
+    ) as element(destinationCount)
+    {
+      let $database-id := 
+        try { xdmp:database($pubdb)}
+        catch ($e) { xdmp:log($e) }
+      let $query :=
+        "declare variable $ticket-id as xs:string external;
+        xdmp:estimate(collection($ticket-id))"
+      let $vars := (xs:QName("ticket-id"),$ticket-id)
+      let $opts :=
+        <options xmlns="xdmp:eval">
+          <database>{$database-id}</database>
+        </options>
+      let $count := 
+        if ($database-id) then 
+          amped-common:appservices-eval($query,$vars,$opts) 
+        else ()
+      return <destinationCount type="number">{ $count }</destinationCount>
+    };
+
+
+22) 
+
+    declare function double:if-block-indentation() 
+    {
+      if ((condition1 and condition2)
+          or (condition3 and conditin4)
+          or (condition5 and condition6)) then (
+
+        (: here is a comment that tests PrevnonblankIgnoringComments works  :)
+
+        let $hello := 2+2
+        let $dude := "asdf"
+        let Gahh := (
+          "2asdf"
+        )
+        return
+          $dude
+      )
+      else
+        ()
+    }
+
+
+21)
+
+    let $test := if($something-is-true) then
+                    'yes'
+                 else
+                    'no'
+    let $something-else := ...
+    return
+
+
+20) (open assignment)
+    This line should indent under 'element', but instead indents under the 'let'
+    
+
+     let $password-reset-instance := element ea:password-reset {
+        'blah blah'
+
+18) searchpair() dosent seem to work with the following structure:
+
+  Ex. 1 
+
+        if($blah) then (
+            if( 1 eq 1) then (
+
+            ) 
+            else if($blahblah) then (
+
+            ) else (
+
+            )
+        )
+            else (
+
+            )
+
+    Ex. 2 
+
+        if(fn:not(fn:matches($email, $eamt:EMAIL-REGEX))) then (
+           eamt:set-notification-message($eamt:MESSAGE-TYPE-VALIDATION, (
+             if(eamt:is-empty($email)) then
+               "Email is required"
+             else
+               fn:concat('"', $email, '" dosent look like a valid email address.')
+           ))
+        )
+                      else if
+
+
+21) 3/4/2011   The second line currently autoindents because the first
+               ends with a comma:
+              
+  fn:concat("somestring", 
+  $foo:bar-variable ,"=" , xdmp:url-encode($baz) ) 
+
+
+13) Commments shouldn't interfere with finding the 'real' indentation context
+
+  Ex.1 
+
+    let $some-value := for $thing in fn:doc()
+                       return (
+
+                         (: a comment shouldn't intefere with indentation :) 
+                         $some-value
+
+  Ex.2  (not workin)
+
+    <p xmlns="http://www.w3.org/1999/xhtml">
+    {
+            (:  list current tasks here... 
+             :
+             :   see preview.xqy:75
+             :)
+
+             if(fn:empty($task-list-tasks)) then (
+           <h3> No tasks yet. </h3>
+      )
+    }
+    </p>
+
+
+15) The 'return' at the bottom indents to the previous line,
+when it really should indent to the closest FLOWR keyword(?)
+Also, should add '=return' to 'indentkeys'
+
+      declare function local:foo(                                  
+        $bar as xs:string,                                                
+        $baz as xs:string                                                  
+      )
+      {
+        let $boz := pm:get-bbb($bar)                      
+
+        let $boop :=                                                   
+          pm:zeeeeepo($aaa, $bbb, $ccc, $ddd,                 
+              $long-variable-name-here)
+              return        
+
+16) The second line of this function call should indent 
+to the start of its parameter list, but instead 'autoindent's
+
+     pm:email($invitation-message,
+              pm:build-invitation-message($name, $company, $email, $cc, $participant-hash) 
+
+

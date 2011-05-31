@@ -1,0 +1,16 @@
+(: vi: ft=xquery sw=4
+
+    Test #2 - embedded tags
+:)
+
+let $test := 
+    <tags>
+        <dont>
+            <indent-right/>
+            <foo>
+                foo
+            </foo>
+        </dont>
+    </tags>
+return
+    $test

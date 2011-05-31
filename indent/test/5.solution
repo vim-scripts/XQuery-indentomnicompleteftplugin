@@ -1,0 +1,17 @@
+(: vi: ft=xquery sw=4
+
+    Test #5 - FLOWR alignment,  let -> function call -> for
+:)
+
+let $release-names := 
+    fn:distinct-values(
+        for $pre-release in $task-list-tasks//etl:pre-release-values/child::*
+        let $dood :=
+            "dooooooooood"
+        return 
+            fn:local-name($pre-release)
+    ) 
+for $release-name in $release-names
+order by $release-name
+return
+    $release-name 

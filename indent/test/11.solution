@@ -1,0 +1,13 @@
+(: vi: ft=xquery sw=4
+
+    Test #11 - Line wrapping for if statements should use double the 
+    default indentation value
+:)
+
+if ((condition1 and condition2)
+        or (condition3 and condition4)
+        or (condition5 and condition6)) then
+    do-something-about-it()
+else
+    ()
+

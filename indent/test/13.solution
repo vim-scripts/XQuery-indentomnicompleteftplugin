@@ -1,0 +1,19 @@
+(: vi: ft=xquery sw=4
+
+    Test #13 - previous keyword alignment should not pass through tags
+:)
+
+<tr>
+    <td class="label"> Type </td>
+    <td class="stuff">
+        <select name="{$REQUEST-PARAM-REPOSITORY-TYPE}">
+        {
+            for $repo-type in $ham:ALL-REPOSITORY-TYPES
+            return
+                <option value="{$repo-type}">{ $repo-type }</option>
+        }
+        </select>
+    </td>
+
+</tr>
+

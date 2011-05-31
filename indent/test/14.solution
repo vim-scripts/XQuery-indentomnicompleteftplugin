@@ -1,0 +1,16 @@
+(: vi: ft=xquery sw=4
+
+    Test #14 - no-parens if-else if-else-return alignment
+:)
+
+for $line in fn:tokenize($diff-output, "\n")
+let $starts-with-plus := fn:starts-with($line, "+")
+let $starts-with-minus := fn:starts-with($line, "+")
+let $class :=
+    if($starts-with-plus) then 
+        "plus"
+    else if($starts-with-minus) then 
+        "minus"
+    else 
+        ""
+return (

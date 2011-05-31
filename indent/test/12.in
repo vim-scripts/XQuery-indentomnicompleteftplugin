@@ -1,0 +1,20 @@
+(: vi: ft=xquery sw=4
+
+    Test #12 - XML indentation when syntax check dosen't work
+:)
+
+declare function test {
+
+layout:layout( 
+"Configure",
+"configure.xqy",
+$layout:OPTIONS-NONE,
+
+<div id="content">
+
+
+
+</div>
+)
+
+}

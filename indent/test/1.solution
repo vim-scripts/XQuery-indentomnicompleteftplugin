@@ -1,0 +1,13 @@
+(: vi: ft=xquery sw=4
+
+    Test #1 - rhs FLOWR expression alignment 
+:)
+
+let $starters := for $rule in $options/opt:grammar/opt:starter
+                 where contains($input, $rule) (: at quick first pass, throw out any starters that simply don't appear anywhere :)
+                 order by string-length($rule)
+                 return (map:put($startermap, $rule, ($rule, (empty($rule/@tokenize) or $rule/@tokenize ne 'word'))), string($rule))
+for $segment at $segnum in $qsplit
+return if ($segnum mod 2 eq 0)
+       then ( (: this is a quoted part of the qtext :)
+

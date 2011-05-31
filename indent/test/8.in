@@ -1,0 +1,31 @@
+(: vi: ft=xquery sw=4
+
+     test #8 - searchpairpos() and function param alignment
+:)
+
+                                        if($blah) then (
+
+                                        if( 1 eq 1) then (
+
+                                        let $dude := ( $something,
+                                        $hello, $aaaa-bbb,
+                                        $peace
+                                        )
+                                        let $http-get := 
+                                        xdmp:http-get($get-url,
+                                        <options xmlns="xdmp:http">
+                                        </options>
+                                        )
+                                        let $hello := "hello"
+                                        return 
+                                        $hello
+                                        ) 
+                                        else if($blahblah) then (
+
+                                        ) else (
+
+                                        )
+                                        )
+                                        else (
+
+                                        )

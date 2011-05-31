@@ -1,0 +1,11 @@
+(: vi: ft=xquery sw=4
+
+    Test #3 - FLOWR statement alignment
+
+    12/1/2010   The 2nd let statement should align with the first despite there
+                being a line in between.
+:)
+
+let $some-variable-name := 
+    $thing/bt:foo/bt:bug/bt:bar/bt:bazi-nator
+let $gaga := "gaaa"

@@ -1,0 +1,18 @@
+(: vi: ft=xquery sw=4
+
+    Test #9 - nested FLOWR return keyword alignment
+:)
+
+for $something in $things
+return
+    let $svn-directories := fn:tokenize($content, "\n")
+    return (
+
+        for $dir in $svn-directories
+        return
+            <div>
+            {
+                $dir
+            }
+            </div>
+    )

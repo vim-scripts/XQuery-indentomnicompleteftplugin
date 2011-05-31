@@ -1,0 +1,14 @@
+(: vi: ft=xquery sw=4
+
+    test #7 - function declaration argument alignment (from xqdoc.org pdf p.26)
+:)
+
+declare function multiply-operands($operand1 as xs:integer,
+                                   $operand2 as xs:integer)
+as xs:integer
+{
+    let $product := $operand1 * $operand2 (: multiply the values :)
+    return
+        $product
+};
+

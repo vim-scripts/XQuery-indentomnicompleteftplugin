@@ -1,0 +1,10 @@
+(: vi: ft=xquery sw=4
+
+    Test #4 - Basic nested FLOWR Expression
+:)
+
+let $dood := let $foo := 'asdf'
+             order by $somethingelse
+             return 'adsF'
+let $googogo := <hello> 2 </hello>
+let $dog := "dog"

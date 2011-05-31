@@ -1,0 +1,12 @@
+(: vi: ft=xquery sw=4
+
+    Test #15 - statement alignment in multi-line where clause
+:)
+
+let $foo := "foo"
+where (
+    fn:not(util:is-empty($file-or-folder-name)) 
+        and $file-or-folder-name ne "./"    (: for svn :)
+)
+return
+    $foo
