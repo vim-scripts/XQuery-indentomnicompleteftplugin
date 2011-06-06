@@ -1,0 +1,44 @@
+ 
+
+-description-
+
+This plugin configures Vim to be a little more efficient at editing XQuery...!
+
+It also sets up Exuberant Ctags for XQuery, since it's not one of the supported languages.
+
+ftplugin/xquery.vim: 
+
+    -Makes keys like gd and <C-]> work better when editing XQuery files 
+    by temporarily adding the hyphen - to the 'iskeyword' variable
+
+    -Sets options that are useful when editing XQuery (like 'set comments')
+
+    -Sets a few variables to make matchit.vim and taglist.vim work 
+     better with XQuery
+
+xquerycomplete.vim:
+
+    - Completes W3C XQuery 'fn' functions, types and keywords. 
+
+    -Also completes MarkLogic builtins and any functions I could find at...
+    http://developer.marklogic.com/pubs/4.1/apidocs/All.html
+
+indent/xquery.vim:
+
+    - Attempts to indent according to the 'XQuery' Style Conventions' here:
+      http://xqdoc.org/xquery-style.html
+
+
+
+-install details-
+
+  1.  Copy ftplugin/xquery.vim to $HOME/.vim/ftplugin or $HOME/vimfiles/ftplugin or $VIM/vimfiles/ftplugin (and set 'filetype plugin on')
+
+  2.  Copy autoload/xquerycomplete.vim to $HOME/.vim/autoload or $HOME/vimfiles/autoload or $VIM/vimfiles/autoload
+
+  3.  Copy indent/xquery.vim to $HOME/.vim/indent/ or $HOME/vimfiles/indent or $VIM/vimfiles/indent   (and set 'filetype indent on')
+
+  4.  Copy _ctags to $HOME/.ctags (or one of the alternatives at http://ctags.sourceforge.net/ctags.html#FILES)
+
+  5.  Download Exuberant Ctags and put it on your path.  Use 'ctags -R' to build a tags file for your XQuery source folder   
+ 

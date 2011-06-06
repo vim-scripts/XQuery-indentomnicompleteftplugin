@@ -1,60 +1,40 @@
 " XQuery completion script
 " Language: XQuery
 " Maintainer:   David Lam <dlam@dlam.me>
-" Created: 2010 May 27
-" Last Change: 2010 December 7
+" Last Change: 2011 June 2
 "
-"   :h complete-functions   for how to write it o_O
+" Notes:
+"   Completes W3C XQuery 'fn' functions, types and keywords. 
+"
+"   Also completes all the MarkLogic functions I could find at...
+"   http://developer.marklogic.com/pubs/4.1/apidocs/All.html
+"
+" Usage:
+"   Generally, just start by typing it's namespace and then <CTRL-x><CTRL-o>
+"
+"        fn<CTRL-x><CTRL-o>
+"           ->  list of functions in the 'fn' namespace
+"
+"        fn:doc<CTRL-x><CTRL-o>
+"           ->  fn:doc(
+"                fn:doc-available(
+"                fn:document-uri(
+"
+"        xs<CTRL-x><CTRL-o>
+"           ->  list of all xquery types
+"
+"        decl<CTRL-x><CTRL-o>
+"           ->  declare
+"                declare function
+"                declare namespace
+"                declare option
+"                declare default
+"
+"
+"   :h complete-functions
 "   :h omnifunc
 "   :h filetype-plugin-on
-"
-"       if exists('&ofu')
-"         setlocal omnifunc=xquerycomplete#CompleteXQuery
-"       endif
-"
-"
-"    :h usr_41.txt      or  :h 41             VIM SCRIPT GUIDE!!!1
-"    :h internal-variables
-"
-"    Q. how to set omnifunc to autoload/xml.vim?
-"    A. set omnifunc=xmlcomplete#CompleteTags
-"
-"    Q. how to call xmlcomplete  manually?
-"    A. in insert mode, <C-R>= xmlcomplete#CompleteTags(1,[])  <CR>
-"
-"
-"
-" TODO  
-"      6.  4/26/2011  Add preceding/following-sibling/preceding-sibling etc.  "                     
-"    
-"      5.  1/28/2011  For functions like 'xdmp:set-response-content-type('
-"                     ...it should see the opening paren, and then fill in
-"                     text/html or other stuff
-"      
-"      4.  1/28/2011  Complete text/xml, text/html etc.
-"
-"      3.  12/3/2010  Common ML functions should go to the top, e.g.
-"      xdmp:document-insert.    Also... if you omni-complete an xdmp:
-"      the results are unsorted!
-"
-"      2.  12/2/2010   complete xqdoc thingys  like @since @return<F2>
 
-"      1.  12/2/2010   Exist functions:
-"                         http://demo.exist-db.org/exist/xquery/functions.xql
-"
-
-
-" TODO add option to include geospatial completions!
-"
-" TODO 11/18/2010   Omnicomplete entity references, e.g.  &amp;  &nbsp;
-"
-" FIXME 12/1/2010   Its completing from here with Ctrl+P even 
-"                   when no namespace is specified 
-"
-"                   ex. type 'ad'<Ctrl-P>   
-"
-"                      ...and look at all the Admin API completions
-"
  
 if exists("b:did_xqueryomnicomplete")
     "finish
@@ -62,15 +42,6 @@ if exists("b:did_xqueryomnicomplete")
 endif
 let b:did_xqueryomnicomplete = 1
  
-" 
-"  Notes:
-"
-"  ex.  how to append ( to the end of a list of function names...
-"
-"           call map(arraymeth, 'v:val."("')
-
-
-" Main omnicomplete function! 
 function! xquerycomplete#CompleteXQuery(findstart, base) 
 
   if a:findstart
@@ -86,10 +57,7 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
 	endwhile
 	let b:compl_context = getline('.')[0:compl_begin]
 
-    "echomsg "xquerycomplete.vim:82   start: " . start .  " b:compl_context: " . b:compl_context
-
 	return start
-
   else
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -281,8 +249,6 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
         " and more TODO...
 "}}}
 
-
-
     
     " http://developer.marklogic.com/pubs/4.1/apidocs/alerting.html
     " let alertfunctions = ["{{{
@@ -389,11 +355,6 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
 "}}}
     
 
-    " XXX XXX NOTE NOTE!!!  cts:geospatial stuff Not enabled by default... 
-    "
-    "   (append to the 'all_ctsfunctions' variable if you do geospatial
-    "   stuffs....)
-    "
     " cts:
     " http://developer.marklogic.com/pubs/4.1/apidocs/GeospatialBuiltins.html
     " let ctsgeospatial_functions = ["{{{
@@ -979,8 +940,8 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
         \ builtin_function_namespaces +
         \ predeclared_namespaces
 
-    "  When completing a namespace, the user will almost always want the colon
-    "  after it too!
+    "  When completing a namespace, the user will almost 
+    "  always want the colon after it too!
     "
     "   --> see javascriptcomplete.vim:583
 	call map(ALL_FUNCTION_NAMESPACES, 'v:val.":"')
@@ -1005,18 +966,16 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
       call map(admin_api_functions, '"admin:" . v:val . "("')
       let function_completions = copy(admin_api_functions)
     elseif namespace =~ 'alert'
-      call map(fnfunctions, '"alert:" . v:val . "("')
-      let function_completions = copy(fnfunctions)
-
+      call map(alertfunctions, '"alert:" . v:val . "("')
+      let function_completions = copy(alertfunctions)
     elseif namespace =~ 'xs'
-      " not really a function completion, but watever
-
       let function_completions = atomic_types
     endif
 
 
 
-    " @see Walmsley:27 'Categories of Expressions'
+    " see Walmsley p. 27 'Categories of Expressions'
+
     "let keywords = ["{{{
     let keywords = [
         \ "for", 
@@ -1049,9 +1008,7 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
         \ ]
 "}}}
     
-    "  8/6/2010  hmmm above ^^ dont have everything 
-    "
-    "    hmmm note:  try/catch in MarkLogic only!
+    "  hmmm above ^^ dont have everything 
     "
     " let morekeywords = ["{{{
     let morekeywords = [
@@ -1068,8 +1025,6 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
         \ 'element',
         \ 'attribute',
         \ 'function',
-        \ 'try', 
-        \ 'catch',
         \ 'import',
         \ 'import module',
         \ 'import module namespace',
@@ -1084,8 +1039,6 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
         \ ]
 "}}}
 
-    " evenmorekeywords since 12/1/2010!
-
     " let evenmorekeywords = ["{{{
     let evenmorekeywords = [
         \ 'else',
@@ -1094,7 +1047,6 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
         \ 'if'
         \ ]
 "}}}
-
 
     "  let predefined_entity_references = ["{{{
     "  http://www.w3.org/TR/xquery/#dt-predefined-entity-reference
@@ -1107,16 +1059,6 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
         \ ]
 "}}}
 
-    let ZERO_OR_MORE_METASYMBOL = '*'
-    let ZERO_OR_ONE_METASYMBOL  = '?'
-    let ONE_OR_MORE_METASYMBOL  = '+'
-
-
-    " hmmm wat about other weird XQuery expressions like
-    " there prolog declarations....   (Walmsley:161)
-    "
-    "    declare boundary-space preserve
-    "
 
     if(a:base =~ '&$')
         "...the character right before the cursor is an ampersand"
@@ -1125,9 +1067,6 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
 
         let res  = []
         let res2 = []
-
-        " let values = function_completions + ALL_FUNCTION_NAMESPACES + morekeywords + keywords
-        " let values = keywords + morekeywords + function_completions + ALL_FUNCTION_NAMESPACES + generic_types
         let values = evenmorekeywords + keywords + morekeywords + function_completions + ALL_FUNCTION_NAMESPACES + generic_types + predefined_entity_references
 
         for v in values
@@ -1145,4 +1084,4 @@ function! xquerycomplete#CompleteXQuery(findstart, base)
 endfunction 
 
 
-" vim:set foldmethod=marker:
+" vim:sw=4 fdm=marker tw=80

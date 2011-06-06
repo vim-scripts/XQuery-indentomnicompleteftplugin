@@ -1,32 +1,34 @@
 " Vim filetype plugin file
-" Language:	XQuery
+" Language:	    XQuery
 " Maintainer:	David Lam <dlam@dlam.me>
-" Last Change:  2010 Jun 30
-" URL:		 
+" Last Change:  2011 Jun 2
 "
 " Notes: 
-"    Makes gd, gD, <C-]> work right for XQuery!
+"    -Makes keys like gd and <C-]> work better when editing XQuery files 
+"     by temporarily adding the hyphen - to the 'iskeyword' variable
+"     (one could add it to 'iskeyword' permanently... but that makes the 
+"     basic movement keys move a bit too far)
 "
-" Links:
-"    http://www.xqdoc.org/xquery-style.html
-"    :h usr_41.txt   or  :h script
+"    -Sets options that are useful when editing XQuery (like 'set comments')
+
+"    -Sets a few variables to make matchit.vim and taglist.vim work 
+"     better with XQuery
 "
-" Todo:
-"    - 2/18/2011  b:undo_ftplugin needs to remove mappings too
-"    - 3/4/2011   xqueryft:XQueryGotoDeclaration  needs to highlight 
-"                 the word like xqueryft:Star does
-"    - 3/8/2011   :h b:match_words
-"    - 5/18/2011  <C-w> ] 
+"    -Sets the omnicomplete function to xquerycomplete.vim, which completes 
+"     XQuery keywords and function names from 
+"     http://developer.marklogic.com/learn/4.1/api-reference
 "
+
 
 " Only do this when not done yet for this buffer
 if exists("b:did_ftplugin")
-  "finish
-  delfunction xqueryft:XQueryTag
+"  finish
+   delfunction xqueryft:XQueryTag
+   delfunction xqueryft:XQueryGotoDeclaration
+   delfunction xqueryft:Star
+   delfunction xqueryft:BracketI
 endif
 let b:did_ftplugin = 1
-
-runtime indent/xquery.vim
 
 " http://markmail.org/message/5vfzrb7ojvds5drx
 autocmd InsertEnter *.xqy,*.xql,*.xqe,*.xq set iskeyword+=-
@@ -38,8 +40,6 @@ inoremap <C-c> <C-c>:set isk-=-<cr>
 "           to the buffer you made the jump in via i_Ctrl-T or i_Ctrl-O or something
 autocmd BufEnter *.xqy,*.xql,*.xqe,*.xq set iskeyword-=-   
 
-"   11/30/2010  
-"
 if !exists("*xqueryft:XQueryTag")
     function! xqueryft:XQueryTag(is_tjump)
      
@@ -64,9 +64,6 @@ if !exists("*xqueryft:XQueryTag")
         let l:orig_col = getpos('.')[2]
         call search(':')
         let l:word_at_cursor = expand("<cword>")
-
-        "echomsg '/ftplugin/xquery.vim:63  l:orig_col:' . string(l:orig_col)
-
         " go back to where we were
         call cursor(line('.'), l:orig_col)
       endif
@@ -104,7 +101,6 @@ endif
 if !exists("*xqueryft:Star")
     function! xqueryft:Star(goforward)
         set iskeyword+=- | let @/='\<'.expand('<cword>').'\>' | set iskeyword-=- 
-
         if a:goforward
             normal! n 
         else 
@@ -112,6 +108,18 @@ if !exists("*xqueryft:Star")
         endif
     endfunction
 endif
+
+if !exists("*xqueryft:BracketI")
+
+    function! xqueryft:BracketI(iscapital)
+        set iskeyword+=- 
+
+        " TODO  find function equivalent for [i and [I 
+
+        set iskeyword-=- 
+    endfunction
+endif
+
 
 "  these from :h write-filetype-plugin
 "
@@ -133,32 +141,22 @@ if !exists("no_plugin_maps") && !exists("no_mail_maps")
         noremap <buffer> * :call xqueryft:Star(1)<CR>
     endif
 
+"     if !hasmapto('xqueryft:BracketI')
+"         noremap <buffer> [i :call xqueryft:BracketI(0)<CR>
+"         noremap <buffer> [I :call xqueryft:BracketI(1)<CR>
+"     endif
+
 endif
-
-
-" :h matchit-extend  or...  http://vim-taglist.sourceforge.net/extend.html
-"
-"    Also, try 'ctags --list-kinds=all'   to see all the params for different
-"    languages that you can pass in to this variable!
-let tlist_xquery_settings = 'xquery;m:module;v:variable;f:function'
-
 
 " Comment blocks always start with a (: and end with a :)
 " Works for XQDoc style start comments like (:~ too.
 setlocal comments=s1:(:,mb::,ex::)
 setlocal commentstring=(:%s:)
 
-" for html tags?
-"setlocal matchpairs+=<:>
-
 " Format comments to be up to 78 characters long  (from vim.vim)
 if &tw == 0
   setlocal tw=78
 endif
-
-" when doing indents using indentexpr=XQueryIndentGet, 
-" use two spaces of indentation...!
-setlocal shiftwidth=2
 
 " Set 'formatoptions' to break comment lines but not other lines,  
 " and insert the comment leader when hitting <CR> or using "o".     
@@ -167,14 +165,10 @@ setlocal formatoptions-=t formatoptions+=croql
 
 
 if exists('&ofu')
-  "  :h ft-syntax-omni
-  " setlocal omnifunc=syntaxcomplete#Complete
   setlocal omnifunc=xquerycomplete#CompleteXQuery
 endif
 
-" copied from html.vim!
-"   7/14/2010   Added b:match_words that match parens and brackets
-"  
+" from html.vim
 if exists("loaded_matchit")
     let b:match_ignorecase = 1
     let b:match_words = '<:>,' .
@@ -185,7 +179,15 @@ if exists("loaded_matchit")
     \ '<\@<=\([^/][^ \t>]*\)[^>]*\%(>\|$\):<\@<=/\1>'
 endif
 
-" 8/27/2010   :h undo_ftplugin
+" :h matchit-extend  or...  http://vim-taglist.sourceforge.net/extend.html
+"
+"    Also, try 'ctags --list-kinds=all'   to see all the params for different
+"    languages that you can pass in to this variable!
+let tlist_xquery_settings = 'xquery;m:module;v:variable;f:function'
+
 let b:undo_ftplugin = 'setlocal formatoptions<'
 		\  . ' comments< commentstring< omnifunc<'
         \  . ' shiftwidth< tabstop<' 
+
+
+" vim:sw=4 fdm=marker tw=80

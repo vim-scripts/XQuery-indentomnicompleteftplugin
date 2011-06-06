@@ -1,5 +1,41 @@
 This is a mirror of http://www.vim.org/scripts/script.php?script_id=3611
 
-Scripts to make Vim a little more efficient at editing XQuery...!
+This plugin configures Vim to be a little more efficient at editing XQuery...!
+
+It also sets up Exuberant Ctags for XQuery, since it's not one of the supported languages.
+
+ftplugin/xquery.vim: 
+    -Makes keys like gd and <C-]> work better when editing XQuery files by temporarily adding the hyphen - to the 'iskeyword' variable
+    -Sets options useful when editing XQuery (like 'set comments')
+    -Sets a few variables to make matchit.vim and taglist.vim work better with XQuery
+
+xquerycomplete.vim:
+    -Completes W3C XQuery 'fn' functions, types and keywords. 
+    -Also completes MarkLogic builtins and any functions I could find at... http://developer.marklogic.com/pubs/4.1/apidocs/All.html
+
+        Examples:
+
+            fn<CTRL-x><CTRL-o>
+               ->  list of functions in the 'fn' namespace
+
+            fn:doc<CTRL-x><CTRL-o>
+               ->  fn:doc(
+                   fn:doc-available(
+                   fn:document-uri(
+
+            xs<CTRL-x><CTRL-o>
+               ->  list of all xquery types
+
+            decl<CTRL-x><CTRL-o>
+               ->  declare
+                   declare function
+                   declare namespace
+                   declare option
+                   declare default
+
+
+indent/xquery.vim:
+    - Attempts to indent according to the 'XQuery Style Conventions' here:  http://xqdoc.org/xquery-style.html
+
 
 
