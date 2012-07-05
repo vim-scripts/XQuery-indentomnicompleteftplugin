@@ -8,6 +8,8 @@ ftplugin/xquery.vim:
     -Makes keys like gd and<C-]> and i_CTRL-p work better when editing XQuery files by temporarily adding the hyphen - to the 'iskeyword' option
     -Sets options useful when editing XQuery (like 'set comments')
     -Sets a few variables to make matchit.vim and taglist.vim work better with XQuery
+    -Comment regions out via surround.vim by visually selecting an area, then pressing Sc
+
 
 xquerycomplete.vim:
     -Completes W3C XQuery 'fn' functions, types and keywords. 
@@ -35,18 +37,15 @@ xquerycomplete.vim:
 
 
 indent/xquery.vim:
-    - Attempts to indent according to the 'XQuery Style Conventions' here:  http://xqdoc.org/xquery-style.html
+    - It can recognize complex FLOWR expressions. For example in the example below,
+      if in insert mode, hitting enter after the first line will immediately align the cursor with the 'for'.
 
-    - Typing out certain keywords (like for/let/where/order/return/else) will automatically indent to the correct location when typed out.
-
-    - It can recognize complex FLOWR expressions. For example,
-      if you're in insert mode hitting enter after the first line will immediately align the cursor with the 'for'.
       Also,  typing out the 'let' in the fourth line will immediately re-indent the line to align with the 'let' on the first line.
 
- 
+
              let $foo := for $editor in $editors
-                              where not(contains($editor, "emacs")) 
-                              return $editor
+                         where not(contains($editor, "emacs"))
+                         return $editor
              let $bar := "bar"
              return
                    $bar

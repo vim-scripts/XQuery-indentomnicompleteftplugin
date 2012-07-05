@@ -154,9 +154,9 @@ setlocal comments=s1:(:,mb::,ex::)
 setlocal commentstring=(:%s:)
 
 " Format comments to be up to 78 characters long  (from vim.vim)
-if &tw == 0
-  setlocal tw=78
-endif
+" if &tw == 0
+"   setlocal tw=78
+" endif
 
 " Set 'formatoptions' to break comment lines but not other lines,  
 " and insert the comment leader when hitting <CR> or using "o".     
@@ -189,5 +189,8 @@ let b:undo_ftplugin = 'setlocal formatoptions<'
 		\  . ' comments< commentstring< omnifunc<'
         \  . ' shiftwidth< tabstop<' 
 
+
+" surround.vim    Usage: visually select text, then type Sc 
+let b:surround_{char2nr("c")} = "(: \r :)"
 
 " vim:sw=4 fdm=marker tw=80

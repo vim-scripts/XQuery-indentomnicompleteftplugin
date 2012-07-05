@@ -47,6 +47,8 @@ let b:did_indent = 1
 
 setlocal autoindent  "usually people just line FLOWR's up etc.
 setlocal indentexpr=XQueryIndentGet()
+
+" automatically indent when typing these keys or typing out FLWOR keywords
 setlocal indentkeys=!^F,0(,0),0{,0},o,O,e,0=for,0=let,0=where,0=order,0=return,0=else,0=or,0=and
 
 " for a closing </xmlTag>
